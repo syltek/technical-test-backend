@@ -4,20 +4,17 @@ server:
 ---
 spring:
   profiles: develop
-  jpa:
-    show_sql: false
-    database: H2
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;IGNORECASE=TRUE
-    initialize: false
+  data.mongodb:
+    uri: mongodb://localhost:27017/playtomic
 stripe.simulator.charges-uri: https://sandbox.playtomic.io/v1/stripe-simulator/charges
 stripe.simulator.refunds-uri: https://sandbox.playtomic.io/v1/stripe-simulator/payments/{payment_id}/refunds
 ---
 spring:
   profiles: test
-  jpa:
-    show_sql: false
-    database: H2
+  data.mongodb:
+    host: localhost
+    port: 0
+    database: playtomic
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;IGNORECASE=TRUE
     initialize: false

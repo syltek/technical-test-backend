@@ -16,7 +16,7 @@ You have to code endpoints for these operations:
 The basic structure of a wallet is its identifier and its current balance. If you think you need extra fields, add them. We will discuss it in the interview. 
 
 So you can focus on these problems, you have here a maven project with a Spring Boot application. It already contains
-the basic dependencies and an H2 database. There are development and test profiles.
+the basic dependencies and in-memory version of MongoDB for testing. There are develop and test profiles.
 
 You can also find an implementation of the service that would call to the real payments platform (StripePaymentService).
 This implementation is calling to a simulator deployed in one of our environments. Take into account
