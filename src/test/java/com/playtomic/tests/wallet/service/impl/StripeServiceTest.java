@@ -1,13 +1,19 @@
 package com.playtomic.tests.wallet.service.impl;
 
 
-import com.playtomic.tests.wallet.service.StripeAmountTooSmallException;
-import com.playtomic.tests.wallet.service.StripeServiceException;
-import com.playtomic.tests.wallet.service.StripeService;
+import com.playtomic.tests.wallet.service.payment.stripe.StripeAmountTooSmallException;
+import com.playtomic.tests.wallet.service.payment.stripe.StripeServiceException;
+import com.playtomic.tests.wallet.service.payment.stripe.StripeService;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -17,9 +23,11 @@ import java.net.URI;
  *
  * How would you test this?
  */
+@SpringBootTest
+@ActiveProfiles(profiles = "test")
 public class StripeServiceTest {
 
-    URI testUri = URI.create("http://how-would-you-test-me.localhost");
+    URI testUri = URI.create("https://sandbox.playtomic.io/v1/stripe-simulator/charges");
     StripeService s = new StripeService(testUri, testUri, new RestTemplateBuilder());
 
     @Test
@@ -32,5 +40,15 @@ public class StripeServiceTest {
     @Test
     public void test_ok() throws StripeServiceException {
         s.charge("4242 4242 4242 4242", new BigDecimal(15));
+    }
+
+    @Configuration
+    static class Config {
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertiesResolver() {
+            return new PropertySourcesPlaceholderConfigurer();
+        }
+
     }
 }
