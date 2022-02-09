@@ -40,6 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class WalletServiceTest {
 
     private static final String TEST_CREDIT_CARD = "4242424242424242";
+    private static final String TEST_INVALID_CREDIT_CARD = "424242424242424";
     private static final int TIMEOUT = 20 * 1000;
 
     @Autowired
@@ -80,13 +81,31 @@ public class WalletServiceTest {
     @Test
     public void test_chargeMoneyWalletByIdForValidRequestBody() {
         WalletDto walletDto = walletService.getWallet(1L);
-        boolean isSucceed = walletService.chargeMoneyWalletByCreditCard(1L,
+        walletService.chargeMoneyWalletByCreditCard(1L,
                 ChargeRequestDto.builder().currency(Currency.USD.name()).amount(new BigDecimal(10)).creditCardNumber(TEST_CREDIT_CARD).build());
 
         WalletDto updatedWalletDto = walletService.getWallet(1L);
         assertThat(updatedWalletDto.getBalance()).isEqualTo(walletDto.getBalance().add(BigDecimal.TEN));
         assertThat(updatedWalletDto.getUpdatedAt()).isNotEqualTo(walletDto.getUpdatedAt());
-        assertThat(isSucceed).isEqualTo(true);
+        assertThat(updatedWalletDto.getPaymentIds().size()).isEqualTo(walletDto.getPaymentIds().size()+1);
+    }
+
+    @Test
+    public void test_chargeMoneyWalletByIdForInvalidCurrency() {
+        assertThatThrownBy(() -> {
+            walletService.chargeMoneyWalletByCreditCard(1L,
+                    ChargeRequestDto.builder().currency(Currency.EUR.name()).amount(new BigDecimal(50)).creditCardNumber(TEST_CREDIT_CARD).build());
+        }).isInstanceOf(WalletResponseException.class)
+                .hasMessageContaining("Invalid currency");
+    }
+
+    @Test
+    public void test_chargeMoneyWalletByIdForInvalidCreditCard() {
+        assertThatThrownBy(() -> {
+            walletService.chargeMoneyWalletByCreditCard(1L,
+                    ChargeRequestDto.builder().currency(Currency.USD.name()).amount(new BigDecimal(50)).creditCardNumber(TEST_INVALID_CREDIT_CARD).build());
+        }).isInstanceOf(WalletResponseException.class)
+                .hasMessageContaining("Invalid credit card");
     }
 
     @Test

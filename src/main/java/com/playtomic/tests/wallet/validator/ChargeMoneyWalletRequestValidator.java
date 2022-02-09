@@ -2,6 +2,7 @@ package com.playtomic.tests.wallet.validator;
 
 import com.playtomic.tests.wallet.dto.RequestDto;
 import com.playtomic.tests.wallet.dto.ChargeRequestDto;
+import com.playtomic.tests.wallet.dto.WalletDto;
 import com.playtomic.tests.wallet.enums.Currency;
 import com.playtomic.tests.wallet.exception.WalletResponseException;
 import lombok.SneakyThrows;
@@ -14,20 +15,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ChargeMoneyWalletRequestValidator implements RequestValidator {
+public class ChargeMoneyWalletRequestValidator implements RequestValidator<WalletDto> {
 
     private final CreditCardValidator creditCardValidator = new CreditCardValidator();
 
     @SneakyThrows
     @Override
-    public void validate(RequestDto requestDto) {
+    public void validate(RequestDto requestDto, WalletDto walletDto) {
         ChargeRequestDto dto = (ChargeRequestDto) requestDto;
         if (!(dto.getAmount().compareTo(BigDecimal.ZERO) > 0)) {
             throw new WalletResponseException("Invalid amount");
         }
         List<String> currencyList =
                 Arrays.stream(Currency.values()).map(Enum::toString).filter(v -> v.equalsIgnoreCase(dto.getCurrency())).collect(Collectors.toList());
-        if (!(currencyList.size() > 0)) {
+        if (!(currencyList.size() > 0) || !walletDto.getCurrency().name().equalsIgnoreCase(((ChargeRequestDto) requestDto).getCurrency())) {
             throw new WalletResponseException("Invalid currency");
         }
         if (!creditCardValidator.isValid(dto.getCreditCardNumber())) {

@@ -2,6 +2,7 @@ package com.playtomic.tests.wallet.service.wallet;
 
 import com.playtomic.tests.wallet.dto.ChargeRequestDto;
 import com.playtomic.tests.wallet.dto.PaymentDto;
+import com.playtomic.tests.wallet.dto.StripePaymentDto;
 import com.playtomic.tests.wallet.dto.WalletDto;
 
 /**
@@ -9,7 +10,7 @@ import com.playtomic.tests.wallet.dto.WalletDto;
  */
 public interface WalletService {
     WalletDto getWallet(Long id);
-    PaymentDto getPayment(Long id);
-    boolean chargeMoneyWalletByCreditCard(Long id, ChargeRequestDto body);
-    boolean chargeMoneyBackWalletByCreditCard(Long paymentId);
+    PaymentDto getPayment(String id);
+    StripePaymentDto chargeMoneyWalletByCreditCard(Long id, ChargeRequestDto body);
+    WalletDto chargeMoneyBackWalletByCreditCard(String paymentId);
 }

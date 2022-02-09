@@ -19,7 +19,7 @@ import java.util.Date;
 public class PaymentDto {
     @NonNull
     @JsonProperty("id")
-    private Long id;
+    private String id;
 
     @NonNull
     @JsonProperty("walletId")

@@ -23,12 +23,11 @@ import java.net.URI;
  *
  * How would you test this?
  */
-@SpringBootTest
 @ActiveProfiles(profiles = "test")
 public class StripeServiceTest {
 
-    URI testUri = URI.create("https://sandbox.playtomic.io/v1/stripe-simulator/charges");
-    StripeService s = new StripeService(testUri, testUri, new RestTemplateBuilder());
+    String testUrl = "https://sandbox.playtomic.io/v1/stripe-simulator/charges";
+    StripeService s = new StripeService(testUrl, testUrl, new RestTemplateBuilder());
 
     @Test
     public void test_exception() {

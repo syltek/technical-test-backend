@@ -1,7 +1,8 @@
 package com.playtomic.tests.wallet.api;
 
-import com.playtomic.tests.wallet.dto.ResponseDto;
 import com.playtomic.tests.wallet.dto.ChargeRequestDto;
+import com.playtomic.tests.wallet.dto.ResponseDto;
+import com.playtomic.tests.wallet.dto.StripePaymentDto;
 import com.playtomic.tests.wallet.dto.WalletDto;
 import com.playtomic.tests.wallet.service.wallet.WalletService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 /**
  * Updated by Orkun Cavdar on 08/02/2022
@@ -29,18 +32,23 @@ public class WalletController {
 
     @RequestMapping(value = "/charge/{id}", method = RequestMethod.PATCH, consumes = "application/json", produces = "application/json")
     ResponseEntity<ResponseDto> chargeMoneyWalletByCreditCard(@PathVariable("id") Long id,
-                                                        @RequestBody final ChargeRequestDto body) {
+                                                              @RequestBody final ChargeRequestDto body) {
         log.info("Incoming request for charging wallet for: " + body);
-        boolean status = walletService.chargeMoneyWalletByCreditCard(id, body);
-        return new ResponseEntity<>(ResponseDto.builder().code(200).message(status ? "Successful Operation" : "Operation is failed").build(),
+        StripePaymentDto stripePaymentDto = walletService.chargeMoneyWalletByCreditCard(id, body);
+        return new ResponseEntity<>(ResponseDto.builder().code(200).message("Successful Operation").body(new HashMap<>() {{
+            put("paymentId", stripePaymentDto.getId());
+        }}).build(),
                 HttpStatus.OK);
     }
 
     @RequestMapping(value = "/refund/{paymentId}", method = RequestMethod.GET, produces = "application/json")
-    ResponseEntity<ResponseDto> chargeMoneyBackWallet(@PathVariable("paymentId") Long paymentId) {
+    ResponseEntity<ResponseDto> chargeMoneyBackWallet(@PathVariable("paymentId") String paymentId) {
         log.info("Incoming request for charging back payment for: " + paymentId);
-        boolean status = walletService.chargeMoneyBackWalletByCreditCard(paymentId);
-        return new ResponseEntity<>(ResponseDto.builder().code(200).message(status ? "Successful Operation" : "Operation is failed").build(),
+        WalletDto walletDto = walletService.chargeMoneyBackWalletByCreditCard(paymentId);
+        return new ResponseEntity<>(ResponseDto.builder().code(200).message("Successful Operation").body(new HashMap<>() {{
+            put("walletId", String.valueOf(walletDto.getId()));
+            put("currentAmount", String.valueOf(walletDto.getBalance()));
+        }}).build(),
                 HttpStatus.OK);
     }
 

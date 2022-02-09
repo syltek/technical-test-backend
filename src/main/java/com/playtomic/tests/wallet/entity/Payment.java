@@ -3,10 +3,7 @@ package com.playtomic.tests.wallet.entity;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -21,8 +18,7 @@ import java.util.Date;
 @Table(name = "Payment")
 public class Payment {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
     @NonNull
     private Long walletId;
     @NonNull

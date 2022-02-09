@@ -45,36 +45,51 @@ You don't need to write tests for everything, but we would like to see different
 * Dockerfile is added for generating image exposing 8090.
 
 _____________________________________________________________________________________
+
 ## API documentation
 ### Data Types
-Wallet/WalletDto
+Wallet
 ```java
 {
-        "id": 1, <Long>
+    "id": 1, <Long>
     "version": 1, <Long>
-	"currency": "EUR", <Currency<String>>
-        "balance": 100, <BigInteger>
-	"iban": "ES0521005134909988165288", <String>
+    "currency": "EUR", <Currency<String>>
+    "balance": 100, <BigInteger>
+    "iban": "ES0521005134909988165288", <String>
     "createdAt": "2022-02-08T17:52:49.909+00:00", <Date>
     "updatedAt": "2022-02-08T17:53:16.216+00:00" <Date>
+}
+```
+_____________________________________________________________________________________
+WalletDto
+```java
+{
+    "id": 1, <Long>
+    "version": 1, <Long>
+    "currency": "EUR", <Currency<String>>
+    "balance": 100, <BigInteger>
+    "iban": "ES0521005134909988165288", <String>
+    "createdAt": "2022-02-08T17:52:49.909+00:00", <Date>
+    "updatedAt": "2022-02-08T17:53:16.216+00:00", <Date>
+    "paymentIds": ["402bc740-860d-462b-b5eb-0fe3bda40c1b"] List<String>
 }
 ```
 _____________________________________________________________________________________
 Payment/PaymentDto
 ```java
 {
-        "id": 1, <Long>
-	"walletId": 6, <Long>
-	"amount": 100, <BigInteger>
+    "id": 1, <Long>
+    "walletId": 6, <Long>
+    "amount": 100, <BigInteger>
     "createdAt": "2022-02-08T17:52:49.909+00:00", <Date>
-	"isRefunded": false <Boolean>
+    "isRefunded": false <Boolean>
 }
 ```
 _____________________________________________________________________________________
 ChargeRequestDto
 ```java
 {
-        "currency": "EUR", <String>
+    "currency": "EUR", <String>
     "amount": 10, <BigInteger>
     "creditCardNumber": "4242424242424242" <String>
 }
@@ -83,15 +98,19 @@ ________________________________________________________________________________
 ResponseDto
 ```java
 {
-        "code": 200, <Integer>
+    "code": 200, <Integer>
     "message": "Successful Operation" <String>
+    "body":{
+        "key": "value",
+        "key": "value"
+    }
 }
 ```
 _____________________________________________________________________________________
 ExceptionResponseDto
 ```java
 {
-        "code": 422, <Integer>
+    "code": 422, <Integer>
     "status": "UNPROCESSABLE_ENTITY", <String>
     "message": "Amount is too small to charge", <String>
     "timestamp": "2022-02-08T18:50:21.268+00:00" <String>
@@ -110,24 +129,25 @@ Accept: **application/json**
 **Sample**
 ```java
 Request:
-        Method: GET
-        Headers:
-        Accept: application/json
+	Method: GET
+	Headers:
+    	Accept: application/json
 ```
 ```java
 Response:
-        Status: 200
-        Headers:
-        Content-Type: application/json
-        Body:
-        {
-        "id": 1,
-        "currency": "EUR",
-        "balance": 100,
-        "iban": "ES0521005134909988165288",
-        "createdAt": "2022-02-08T17:52:49.909+00:00",
-        "updatedAt": "2022-02-08T17:53:16.216+00:00"
-        }
+	Status: 200
+	Headers:
+     	Content-Type: application/json
+	Body:
+	{
+            "id": 1,
+            "currency": "EUR",
+            "balance": 100,
+            "iban": "ES0521005134909988165288",
+            "createdAt": "2022-02-08T17:52:49.909+00:00",
+            "updatedAt": "2022-02-08T17:53:16.216+00:00",
+            "paymentIds": ["402bc740-860d-462b-b5eb-0fe3bda40c1b"]
+	}
 ```
 _____________________________________________________________________________________
 #### Charge Wallet By Credit Card
@@ -140,26 +160,29 @@ Accept: **application/json**
 
 ```java
 Request:
-        Method: PATCH
-        Headers:
-        Accept: application/json
-        Body:
-        {
-        "currency": "USD",
-        "amount": 10,
-        "creditCardNumber": "4242424242424242"
-        }
+Method: PATCH
+Headers:
+    Accept: application/json
+Body:
+{
+    "currency": "USD",
+    "amount": 10,
+    "creditCardNumber": "4242424242424242"
+}
 ```
 ```java
 Response:
-        Status: 200
-        Headers:
-        Content-Type: application/json
-        Body:
-        {
-        "code": 200,
-        "message": "Successful Operation"
-        }
+Status: 200
+Headers:
+     Content-Type: application/json
+Body:
+{
+    "code": 200,
+    "message": "Successful Operation",
+    "body": {
+        "paymentId": "2099f778-4043-4db9-8561-00d54cb5274f"
+    }
+}
 ```
 _____________________________________________________________________________________
 #### Charge back Wallet
@@ -184,6 +207,10 @@ Headers:
 Body:
 {
     "code": 200,
-    "message": "Successful Operation"
+    "message": "Successful Operation",
+	"body": {
+        "walletId": "2",
+        "currentAmount": "130.00"
+    }
 }
 ```

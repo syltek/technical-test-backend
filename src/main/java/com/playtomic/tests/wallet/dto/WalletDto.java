@@ -6,7 +6,7 @@ import com.playtomic.tests.wallet.enums.Currency;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Orkun Cavdar on 08/02/2022
@@ -42,4 +42,8 @@ public class WalletDto {
     @NonNull
     @JsonProperty("updatedAt")
     private Date updatedAt;
+
+    @NonNull
+    @JsonProperty("paymentIds")
+    private List<String> paymentIds = new ArrayList<>();
 }
