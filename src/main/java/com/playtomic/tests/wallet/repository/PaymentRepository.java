@@ -11,6 +11,5 @@ import java.util.List;
  * Created by Orkun Cavdar on 08/02/2022
  */
 public interface PaymentRepository extends JpaRepository<Payment, String> {
-    @Query("SELECT p FROM Payment p WHERE p.walletId = ?1")
     List<Payment> findByWalletId(Long id);
 }

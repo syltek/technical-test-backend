@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 @Component
-public class StripePaymentResponseValidator implements RequestValidator<StripePaymentDto> {
+public class StripePaymentResponseValidator implements RequestValidator<RequestDto, StripePaymentDto> {
     @Override
     public void validate(RequestDto requestDto, StripePaymentDto stripePaymentDto) {
         if (Objects.isNull(stripePaymentDto.getId()) || stripePaymentDto.getId().isBlank()) {

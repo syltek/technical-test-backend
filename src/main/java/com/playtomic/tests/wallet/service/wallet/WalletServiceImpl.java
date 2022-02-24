@@ -43,7 +43,6 @@ public class WalletServiceImpl implements WalletService {
     private final StripePaymentResponseValidator stripePaymentResponseValidator;
     private final EmbeddedRedis embeddedRedis;
 
-    @SneakyThrows
     @Override
     public WalletDto getWallet(Long id) {
         Optional<Wallet> wallet = walletRepository.findById(id);
@@ -56,7 +55,6 @@ public class WalletServiceImpl implements WalletService {
         }
     }
 
-    @SneakyThrows
     @Override
     public PaymentDto getPayment(String id) {
         Optional<Payment> payment = paymentRepository.findById(id);
@@ -69,7 +67,6 @@ public class WalletServiceImpl implements WalletService {
         }
     }
 
-    @SneakyThrows
     @Override
     public StripePaymentDto chargeMoneyWalletByCreditCard(Long id, ChargeRequestDto body) {
         WalletDto walletDto = getWallet(id);
@@ -95,7 +92,6 @@ public class WalletServiceImpl implements WalletService {
         return stripePaymentDto;
     }
 
-    @SneakyThrows
     @Override
     public WalletDto chargeMoneyBackWalletByCreditCard(String paymentId) {
         PaymentDto paymentDto = getPayment(paymentId);
