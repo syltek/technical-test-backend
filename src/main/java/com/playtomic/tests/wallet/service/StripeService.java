@@ -2,9 +2,9 @@ package com.playtomic.tests.wallet.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,8 +30,8 @@ public class StripeService {
     @NonNull
     private RestTemplate restTemplate;
 
-    public StripeService(@Value("stripe.simulator.charges-uri") @NonNull URI chargesUri,
-                         @Value("stripe.simulator.refunds-uri") @NonNull URI refundsUri,
+    public StripeService(@Value("${stripe.simulator.charges-uri}") @NonNull URI chargesUri,
+                         @Value("${stripe.simulator.refunds-uri}") @NonNull URI refundsUri,
                          @NonNull RestTemplateBuilder restTemplateBuilder) {
         this.chargesUri = chargesUri;
         this.refundsUri = refundsUri;
@@ -51,10 +51,9 @@ public class StripeService {
      *
      * @throws StripeServiceException
      */
-    public void charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
+    public Payment charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
         ChargeRequest body = new ChargeRequest(creditCardNumber, amount);
-        // Object.class because we don't read the body here.
-        restTemplate.postForObject(chargesUri, body, Object.class);
+        return restTemplate.postForObject(chargesUri, body, Payment.class);
     }
 
     /**
