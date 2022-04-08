@@ -1,26 +1,31 @@
 package com.playtomic.tests.wallet.service.impl;
 
 
+import com.playtomic.tests.wallet.WalletApplication;
 import com.playtomic.tests.wallet.service.StripeAmountTooSmallException;
-import com.playtomic.tests.wallet.service.StripeServiceException;
 import com.playtomic.tests.wallet.service.StripeService;
-
+import com.playtomic.tests.wallet.service.StripeServiceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.net.URI;
 
 /**
  * This test is failing with the current implementation.
  *
  * How would you test this?
  */
+@SpringBootTest(classes = WalletApplication.class)
 public class StripeServiceTest {
 
-    URI testUri = URI.create("http://how-would-you-test-me.localhost");
-    StripeService s = new StripeService(testUri, testUri, new RestTemplateBuilder());
+    //this is not using test profile, so this will test the simulator endpoint.
+
+    @Autowired
+    @InjectMocks
+    StripeService s;
 
     @Test
     public void test_exception() {
