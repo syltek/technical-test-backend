@@ -1,7 +1,8 @@
-package com.playtomic.tests.wallet.service;
+package com.playtomic.tests.wallet.service.payment.gateway.stripe;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.playtomic.tests.wallet.exception.StripeServiceException;
+import com.playtomic.tests.wallet.service.PaymentService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +20,9 @@ import java.net.URI;
  * A real implementation would call to String using their API/SDK.
  * This dummy implementation throws an error when trying to charge less than 10€.
  *
- * Enhancement:
- *  1. create an interface for 3rd payment service, so we can have different implementation depending on the third party
- *  2. Have the implementation on different package under service for example: payment.gateway
  */
 @Service
-public class StripeService {
+public class StripeService implements PaymentService {
 
     @NonNull
     private URI chargesUri;
@@ -56,7 +54,7 @@ public class StripeService {
      *
      * @throws StripeServiceException
      */
-    public Payment charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
+    public Payment charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) {
         ChargeRequest body = new ChargeRequest(creditCardNumber, amount);
         return restTemplate.postForObject(chargesUri, body, Payment.class);
     }
@@ -64,7 +62,7 @@ public class StripeService {
     /**
      * Refunds the specified payment.
      */
-    public void refund(@NonNull String paymentId) throws StripeServiceException {
+    public void refund(@NonNull String paymentId) {
         // Object.class because we don't read the body here.
         restTemplate.postForEntity(chargesUri.toString(), null, Object.class, paymentId);
     }

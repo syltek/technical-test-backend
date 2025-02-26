@@ -24,7 +24,11 @@ spring:
   jpa:
     show_sql: false
     database: H2
+    defer-datasource-initialization: true
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;IGNORECASE=TRUE
-stripe.simulator.charges-uri: http://localhost:9999
+  sql:
+    init:
+      data-locations: classpath:/data/data.sql
+stripe.simulator.charges-uri: http://localhost:9999/charges
 stripe.simulator.refunds-uri: http://localhost:9999

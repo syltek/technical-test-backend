@@ -1,14 +1,13 @@
 package com.playtomic.tests.wallet.api;
 
 import com.playtomic.tests.wallet.domain.Wallet;
+import com.playtomic.tests.wallet.domain.TopUpRequest;
 import com.playtomic.tests.wallet.service.WalletService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * possible enhancement: create a specific wallet response class to detached from the domain object.
@@ -32,6 +31,13 @@ public class WalletController {
     public ResponseEntity<Wallet> getWallet(@PathVariable String wallet_id) {
         return ResponseEntity.ok(
                 this.walletService.getWallet(wallet_id)
+        );
+    }
+
+    @PutMapping("/wallet/{wallet_id}/topup")
+    public ResponseEntity<Wallet> topUp(@PathVariable String wallet_id, @Valid @RequestBody TopUpRequest walletRequest) {
+        return ResponseEntity.ok(
+                this.walletService.topUp(wallet_id, walletRequest.getCreditCardNumber(), walletRequest.getAmount())
         );
     }
 }
