@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Enhancement: create an Error response class with error code and message for example.
+ */
 @RestControllerAdvice
 public class WalletExceptionHandler {
 

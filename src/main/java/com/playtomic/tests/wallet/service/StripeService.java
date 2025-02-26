@@ -18,6 +18,10 @@ import java.net.URI;
  *
  * A real implementation would call to String using their API/SDK.
  * This dummy implementation throws an error when trying to charge less than 10€.
+ *
+ * Enhancement:
+ *  1. create an interface for 3rd payment service, so we can have different implementation depending on the third party
+ *  2. Have the implementation on different package under service for example: payment.gateway
  */
 @Service
 public class StripeService {
