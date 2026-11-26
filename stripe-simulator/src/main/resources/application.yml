@@ -1,0 +1,3 @@
+spring.application.name: stripe-simulator
+server:
+  port: 11111
