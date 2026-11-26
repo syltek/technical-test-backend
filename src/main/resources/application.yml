@@ -6,8 +6,8 @@ spring.config.activate.on-profile: develop
 spring:
   data.mongodb:
     uri: mongodb://localhost:27017/playtomic
-stripe.simulator.charges-uri: https://sandbox.playtomic.io/v1/stripe-simulator/charges
-stripe.simulator.refunds-uri: https://sandbox.playtomic.io/v1/stripe-simulator/payments/{payment_id}/refunds
+stripe.simulator.charges-uri: http://localhost:11111/v1/stripe-simulator/charges
+stripe.simulator.refunds-uri: http://localhost:11111/v1/stripe-simulator/payments/{payment_id}/refunds
 ---
 spring.config.activate.on-profile: test
 spring:
