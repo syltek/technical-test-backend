@@ -26,7 +26,7 @@ You will need to start a MongoDB instance to run the application. For example, u
 docker run -d --name mongo4.0-rs -p 27017:27017 mongo:4.0
 ```
 
-You can also find an implementation of the service that would call to the real payments platform (StripePaymentService).
+You can also find an implementation of the service that would call to the real payments platform (StripeService).
 This implementation is calling to a simulator that you can run locally with Docker (code in `stripe-simulator`). Take into account
 that this simulator will return 422 http error codes under certain conditions.
 ```
